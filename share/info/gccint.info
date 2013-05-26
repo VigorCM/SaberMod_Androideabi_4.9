@@ -19602,9 +19602,6 @@ _AArch64 family--`config/aarch64/constraints.md'_
     `Z'
           Integer constant zero
 
-    `Usa'
-          An absolute symbolic address
-
     `Ush'
           The high part (bits 12 and upwards) of the pc-relative
           address of a symbol within 4GB of the instruction
@@ -19946,7 +19943,7 @@ _picoChip family--`picochip.h'_
           16-bit signed integer.
 
 
-_PowerPC and IBM RS6000--`config/rs6000/rs6000.h'_
+_PowerPC and IBM RS6000--`config/rs6000/constraints.md'_
 
     `b'
           Address base register
@@ -19960,6 +19957,9 @@ _PowerPC and IBM RS6000--`config/rs6000/rs6000.h'_
     `v'
           Altivec vector register
 
+    `wa'
+          Any VSX register
+
     `wd'
           VSX vector register to hold vector double data
 
@@ -19972,6 +19972,15 @@ _PowerPC and IBM RS6000--`config/rs6000/rs6000.h'_
     `wl'
           If the LFIWAX instruction is enabled, a floating point
           register
+
+    `wm'
+          If direct moves are enabled, a VSX register.
+
+    `wn'
+          No register.
+
+    `wr'
+          General purpose register if 64-bit mode is used
 
     `ws'
           VSX vector register to hold scalar float data
@@ -19987,8 +19996,9 @@ _PowerPC and IBM RS6000--`config/rs6000/rs6000.h'_
           If the LFIWZX instruction is enabled, a floating point
           register
 
-    `wa'
-          Any VSX register
+    `wQ'
+          A memory address that will work with the `lq' and `stq'
+          instructions.
 
     `h'
           `MQ', `CTR', or `LINK' register
@@ -33266,8 +33276,8 @@ TARGET_SCHED_FIRST_CYCLE_MULTIPASS_DFA_LOOKAHEAD_GUARD (rtx INSN)
  -- Target Hook: void TARGET_SCHED_FREE_SCHED_CONTEXT (void *TC)
      Deallocate a store for target scheduling context pointed to by TC.
 
- -- Target Hook: int TARGET_SCHED_SPECULATE_INSN (rtx INSN, int
-          REQUEST, rtx *NEW_PAT)
+ -- Target Hook: int TARGET_SCHED_SPECULATE_INSN (rtx INSN, unsigned
+          int DEP_STATUS, rtx *NEW_PAT)
      This hook is called by the insn scheduler when INSN has only
      speculative dependencies and therefore can be scheduled
      speculatively.  The hook is used to check if the pattern of INSN
@@ -33278,14 +33288,15 @@ TARGET_SCHED_FIRST_CYCLE_MULTIPASS_DFA_LOOKAHEAD_GUARD (rtx INSN)
      return value equals 1 then NEW_PAT is assigned the generated
      speculative pattern.
 
- -- Target Hook: bool TARGET_SCHED_NEEDS_BLOCK_P (int DEP_STATUS)
+ -- Target Hook: bool TARGET_SCHED_NEEDS_BLOCK_P (unsigned int
+          DEP_STATUS)
      This hook is called by the insn scheduler during generation of
      recovery code for INSN.  It should return `true', if the
      corresponding check instruction should branch to recovery code, or
      `false' otherwise.
 
  -- Target Hook: rtx TARGET_SCHED_GEN_SPEC_CHECK (rtx INSN, rtx LABEL,
-          int MUTATE_P)
+          unsigned int DS)
      This hook is called by the insn scheduler to generate a pattern
      for recovery check instruction.  If MUTATE_P is zero, then INSN is
      a speculative instruction for which the check should be generated.
@@ -48920,9 +48931,9 @@ Concept Index
 * TARGET_SCHED_DFA_POST_CYCLE_INSN:      Scheduling.         (line  144)
 * TARGET_SCHED_DFA_PRE_ADVANCE_CYCLE:    Scheduling.         (line  153)
 * TARGET_SCHED_DFA_PRE_CYCLE_INSN:       Scheduling.         (line  132)
-* TARGET_SCHED_DISPATCH:                 Scheduling.         (line  355)
-* TARGET_SCHED_DISPATCH_DO:              Scheduling.         (line  360)
-* TARGET_SCHED_EXPOSED_PIPELINE:         Scheduling.         (line  364)
+* TARGET_SCHED_DISPATCH:                 Scheduling.         (line  356)
+* TARGET_SCHED_DISPATCH_DO:              Scheduling.         (line  361)
+* TARGET_SCHED_EXPOSED_PIPELINE:         Scheduling.         (line  365)
 * TARGET_SCHED_FINISH:                   Scheduling.         (line  109)
 * TARGET_SCHED_FINISH_GLOBAL:            Scheduling.         (line  126)
 * TARGET_SCHED_FIRST_CYCLE_MULTIPASS_BACKTRACK: Scheduling.  (line  215)
@@ -48932,13 +48943,13 @@ Concept Index
 * TARGET_SCHED_FIRST_CYCLE_MULTIPASS_DFA_LOOKAHEAD_GUARD: Scheduling.
                                                              (line  196)
 * TARGET_SCHED_FIRST_CYCLE_MULTIPASS_DFA_LOOKAHEAD_GUARD_SPEC: Scheduling.
-                                                             (line  328)
+                                                             (line  329)
 * TARGET_SCHED_FIRST_CYCLE_MULTIPASS_END: Scheduling.        (line  220)
 * TARGET_SCHED_FIRST_CYCLE_MULTIPASS_FINI: Scheduling.       (line  230)
 * TARGET_SCHED_FIRST_CYCLE_MULTIPASS_INIT: Scheduling.       (line  225)
 * TARGET_SCHED_FIRST_CYCLE_MULTIPASS_ISSUE: Scheduling.      (line  210)
 * TARGET_SCHED_FREE_SCHED_CONTEXT:       Scheduling.         (line  293)
-* TARGET_SCHED_GEN_SPEC_CHECK:           Scheduling.         (line  315)
+* TARGET_SCHED_GEN_SPEC_CHECK:           Scheduling.         (line  316)
 * TARGET_SCHED_H_I_D_EXTENDED:           Scheduling.         (line  269)
 * TARGET_SCHED_INIT:                     Scheduling.         (line   99)
 * TARGET_SCHED_INIT_DFA_POST_CYCLE_INSN: Scheduling.         (line  149)
@@ -48947,13 +48958,13 @@ Concept Index
 * TARGET_SCHED_INIT_SCHED_CONTEXT:       Scheduling.         (line  279)
 * TARGET_SCHED_IS_COSTLY_DEPENDENCE:     Scheduling.         (line  246)
 * TARGET_SCHED_ISSUE_RATE:               Scheduling.         (line   12)
-* TARGET_SCHED_NEEDS_BLOCK_P:            Scheduling.         (line  308)
-* TARGET_SCHED_REASSOCIATION_WIDTH:      Scheduling.         (line  370)
+* TARGET_SCHED_NEEDS_BLOCK_P:            Scheduling.         (line  309)
+* TARGET_SCHED_REASSOCIATION_WIDTH:      Scheduling.         (line  371)
 * TARGET_SCHED_REORDER:                  Scheduling.         (line   60)
 * TARGET_SCHED_REORDER2:                 Scheduling.         (line   77)
 * TARGET_SCHED_SET_SCHED_CONTEXT:        Scheduling.         (line  285)
-* TARGET_SCHED_SET_SCHED_FLAGS:          Scheduling.         (line  340)
-* TARGET_SCHED_SMS_RES_MII:              Scheduling.         (line  346)
+* TARGET_SCHED_SET_SCHED_FLAGS:          Scheduling.         (line  341)
+* TARGET_SCHED_SMS_RES_MII:              Scheduling.         (line  347)
 * TARGET_SCHED_SPECULATE_INSN:           Scheduling.         (line  297)
 * TARGET_SCHED_VARIABLE_ISSUE:           Scheduling.         (line   24)
 * TARGET_SECONDARY_RELOAD:               Register Classes.   (line  318)
@@ -49682,163 +49693,163 @@ Node: Multi-Alternative847013
 Node: Class Preferences849854
 Node: Modifiers850746
 Node: Machine Constraints854992
-Node: Disable Insn Alternatives906134
-Node: Define Constraints909036
-Node: C Constraint Interface915823
-Node: Standard Names919464
-Ref: shift patterns942015
-Ref: prologue instruction pattern986961
-Ref: window_save instruction pattern987454
-Ref: epilogue instruction pattern987729
-Node: Pattern Ordering1005300
-Node: Dependent Patterns1006536
-Node: Jump Patterns1008156
-Ref: Jump Patterns-Footnote-11010300
-Node: Looping Patterns1010346
-Node: Insn Canonicalizations1015074
-Node: Expander Definitions1019665
-Node: Insn Splitting1027877
-Node: Including Patterns1037479
-Node: Peephole Definitions1039259
-Node: define_peephole1040512
-Node: define_peephole21046843
-Node: Insn Attributes1049910
-Node: Defining Attributes1051016
-Ref: define_enum_attr1054227
-Node: Expressions1055262
-Node: Tagging Insns1062011
-Node: Attr Example1066364
-Node: Insn Lengths1068738
-Node: Constant Attributes1071797
-Node: Delay Slots1072966
-Node: Processor pipeline description1076190
-Ref: Processor pipeline description-Footnote-11095003
-Node: Conditional Execution1095325
-Node: Define Subst1098387
-Node: Define Subst Example1100421
-Node: Define Subst Pattern Matching1103415
-Node: Define Subst Output Template1104640
-Node: Constant Definitions1106710
-Ref: define_enum1110492
-Node: Iterators1110980
-Node: Mode Iterators1111558
-Node: Defining Mode Iterators1112536
-Node: Substitutions1114030
-Node: Examples1116271
-Node: Code Iterators1117719
-Node: Int Iterators1119998
-Node: Subst Iterators1122456
-Node: Target Macros1124148
-Node: Target Structure1127236
-Node: Driver1129351
-Node: Run-time Target1148161
-Node: Per-Function Data1157314
-Node: Storage Layout1160079
-Node: Type Layout1186154
-Node: Registers1201481
-Node: Register Basics1202455
-Node: Allocation Order1207960
-Node: Values in Registers1210406
-Node: Leaf Functions1217895
-Node: Stack Registers1220753
-Node: Register Classes1222025
-Node: Old Constraints1252435
-Node: Stack and Calling1259587
-Node: Frame Layout1260121
-Node: Exception Handling1271001
-Node: Stack Checking1277223
-Node: Frame Registers1282036
-Node: Elimination1290295
-Node: Stack Arguments1294524
-Node: Register Arguments1301386
-Node: Scalar Return1321702
-Node: Aggregate Return1327788
-Node: Caller Saves1331998
-Node: Function Entry1333176
-Node: Profiling1344280
-Node: Tail Calls1345979
-Node: Stack Smashing Protection1347882
-Node: Varargs1349510
-Node: Trampolines1356206
-Node: Library Calls1362249
-Node: Addressing Modes1367188
-Node: Anchored Addresses1387222
-Node: Condition Code1389871
-Node: CC0 Condition Codes1392000
-Node: MODE_CC Condition Codes1395246
-Node: Cond Exec Macros1401767
-Node: Costs1402113
-Node: Scheduling1418582
-Node: Sections1437988
-Node: PIC1453686
-Node: Assembler Format1455746
-Node: File Framework1456884
-Ref: TARGET_HAVE_SWITCHABLE_BSS_SECTIONS1463825
-Node: Data Output1467090
-Node: Uninitialized Data1474866
-Node: Label Output1479877
-Node: Initialization1502845
-Node: Macros for Initialization1508807
-Node: Instruction Output1515530
-Node: Dispatch Tables1526159
-Node: Exception Region Output1530543
-Node: Alignment Output1537226
-Node: Debugging Info1541804
-Node: All Debuggers1542474
-Node: DBX Options1545329
-Node: DBX Hooks1550778
-Node: File Names and DBX1552087
-Node: SDB and DWARF1554199
-Node: VMS Debug1560271
-Node: Floating Point1560858
-Node: Mode Switching1565334
-Node: Target Attributes1569330
-Node: Emulated TLS1577644
-Node: MIPS Coprocessors1581034
-Node: PCH Target1582331
-Node: C++ ABI1584173
-Node: Named Address Spaces1588965
-Node: Misc1593904
-Ref: TARGET_SHIFT_TRUNCATION_MASK1600646
-Node: Host Config1646426
-Node: Host Common1647494
-Node: Filesystem1649873
-Node: Host Misc1653988
-Node: Fragments1656437
-Node: Target Fragment1657632
-Node: Host Fragment1668265
-Node: Collect21668505
-Node: Header Dirs1671141
-Node: Type Information1672564
-Node: GTY Options1675787
-Node: User GC1690108
-Node: GGC Roots1693835
-Node: Files1694551
-Node: Invoking the garbage collector1697258
-Node: Troubleshooting1698761
-Node: Plugins1699837
-Node: Plugins loading1700955
-Node: Plugin API1701824
-Node: Plugins pass1708853
-Node: Plugins GC1710822
-Node: Plugins description1712482
-Node: Plugins attr1713017
-Node: Plugins recording1714902
-Node: Plugins gate1715752
-Node: Plugins tracking1716343
-Node: Plugins building1716931
-Node: LTO1718717
-Node: LTO Overview1719578
-Node: LTO object file layout1725410
-Node: IPA1730042
-Node: WHOPR1739007
-Node: Internal flags1743698
-Node: Funding1744910
-Node: GNU Project1747393
-Node: Copying1748042
-Node: GNU Free Documentation License1785573
-Node: Contributors1810713
-Node: Option Index1848118
-Node: Concept Index1848922
+Node: Disable Insn Alternatives906356
+Node: Define Constraints909258
+Node: C Constraint Interface916045
+Node: Standard Names919686
+Ref: shift patterns942237
+Ref: prologue instruction pattern987183
+Ref: window_save instruction pattern987676
+Ref: epilogue instruction pattern987951
+Node: Pattern Ordering1005522
+Node: Dependent Patterns1006758
+Node: Jump Patterns1008378
+Ref: Jump Patterns-Footnote-11010522
+Node: Looping Patterns1010568
+Node: Insn Canonicalizations1015296
+Node: Expander Definitions1019887
+Node: Insn Splitting1028099
+Node: Including Patterns1037701
+Node: Peephole Definitions1039481
+Node: define_peephole1040734
+Node: define_peephole21047065
+Node: Insn Attributes1050132
+Node: Defining Attributes1051238
+Ref: define_enum_attr1054449
+Node: Expressions1055484
+Node: Tagging Insns1062233
+Node: Attr Example1066586
+Node: Insn Lengths1068960
+Node: Constant Attributes1072019
+Node: Delay Slots1073188
+Node: Processor pipeline description1076412
+Ref: Processor pipeline description-Footnote-11095225
+Node: Conditional Execution1095547
+Node: Define Subst1098609
+Node: Define Subst Example1100643
+Node: Define Subst Pattern Matching1103637
+Node: Define Subst Output Template1104862
+Node: Constant Definitions1106932
+Ref: define_enum1110714
+Node: Iterators1111202
+Node: Mode Iterators1111780
+Node: Defining Mode Iterators1112758
+Node: Substitutions1114252
+Node: Examples1116493
+Node: Code Iterators1117941
+Node: Int Iterators1120220
+Node: Subst Iterators1122678
+Node: Target Macros1124370
+Node: Target Structure1127458
+Node: Driver1129573
+Node: Run-time Target1148383
+Node: Per-Function Data1157536
+Node: Storage Layout1160301
+Node: Type Layout1186376
+Node: Registers1201703
+Node: Register Basics1202677
+Node: Allocation Order1208182
+Node: Values in Registers1210628
+Node: Leaf Functions1218117
+Node: Stack Registers1220975
+Node: Register Classes1222247
+Node: Old Constraints1252657
+Node: Stack and Calling1259809
+Node: Frame Layout1260343
+Node: Exception Handling1271223
+Node: Stack Checking1277445
+Node: Frame Registers1282258
+Node: Elimination1290517
+Node: Stack Arguments1294746
+Node: Register Arguments1301608
+Node: Scalar Return1321924
+Node: Aggregate Return1328010
+Node: Caller Saves1332220
+Node: Function Entry1333398
+Node: Profiling1344502
+Node: Tail Calls1346201
+Node: Stack Smashing Protection1348104
+Node: Varargs1349732
+Node: Trampolines1356428
+Node: Library Calls1362471
+Node: Addressing Modes1367410
+Node: Anchored Addresses1387444
+Node: Condition Code1390093
+Node: CC0 Condition Codes1392222
+Node: MODE_CC Condition Codes1395468
+Node: Cond Exec Macros1401989
+Node: Costs1402335
+Node: Scheduling1418804
+Node: Sections1438244
+Node: PIC1453942
+Node: Assembler Format1456002
+Node: File Framework1457140
+Ref: TARGET_HAVE_SWITCHABLE_BSS_SECTIONS1464081
+Node: Data Output1467346
+Node: Uninitialized Data1475122
+Node: Label Output1480133
+Node: Initialization1503101
+Node: Macros for Initialization1509063
+Node: Instruction Output1515786
+Node: Dispatch Tables1526415
+Node: Exception Region Output1530799
+Node: Alignment Output1537482
+Node: Debugging Info1542060
+Node: All Debuggers1542730
+Node: DBX Options1545585
+Node: DBX Hooks1551034
+Node: File Names and DBX1552343
+Node: SDB and DWARF1554455
+Node: VMS Debug1560527
+Node: Floating Point1561114
+Node: Mode Switching1565590
+Node: Target Attributes1569586
+Node: Emulated TLS1577900
+Node: MIPS Coprocessors1581290
+Node: PCH Target1582587
+Node: C++ ABI1584429
+Node: Named Address Spaces1589221
+Node: Misc1594160
+Ref: TARGET_SHIFT_TRUNCATION_MASK1600902
+Node: Host Config1646682
+Node: Host Common1647750
+Node: Filesystem1650129
+Node: Host Misc1654244
+Node: Fragments1656693
+Node: Target Fragment1657888
+Node: Host Fragment1668521
+Node: Collect21668761
+Node: Header Dirs1671397
+Node: Type Information1672820
+Node: GTY Options1676043
+Node: User GC1690364
+Node: GGC Roots1694091
+Node: Files1694807
+Node: Invoking the garbage collector1697514
+Node: Troubleshooting1699017
+Node: Plugins1700093
+Node: Plugins loading1701211
+Node: Plugin API1702080
+Node: Plugins pass1709109
+Node: Plugins GC1711078
+Node: Plugins description1712738
+Node: Plugins attr1713273
+Node: Plugins recording1715158
+Node: Plugins gate1716008
+Node: Plugins tracking1716599
+Node: Plugins building1717187
+Node: LTO1718973
+Node: LTO Overview1719834
+Node: LTO object file layout1725666
+Node: IPA1730298
+Node: WHOPR1739263
+Node: Internal flags1743954
+Node: Funding1745166
+Node: GNU Project1747649
+Node: Copying1748298
+Node: GNU Free Documentation License1785829
+Node: Contributors1810969
+Node: Option Index1848374
+Node: Concept Index1849178
 
 End Tag Table

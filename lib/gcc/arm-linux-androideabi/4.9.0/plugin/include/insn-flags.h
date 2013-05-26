@@ -24,6 +24,8 @@
 #define HAVE_unaligned_loadhiu (unaligned_access && TARGET_32BIT)
 #define HAVE_unaligned_storesi (unaligned_access && TARGET_32BIT)
 #define HAVE_unaligned_storehi (unaligned_access && TARGET_32BIT)
+#define HAVE_unaligned_loaddi (unaligned_access && TARGET_32BIT)
+#define HAVE_unaligned_storedi (unaligned_access && TARGET_32BIT)
 #define HAVE_extzv_t2 (arm_arch_thumb2)
 #define HAVE_divsi3 (TARGET_IDIV)
 #define HAVE_udivsi3 (TARGET_IDIV)
@@ -2430,6 +2432,8 @@ extern rtx        gen_unaligned_loadhis                 (rtx, rtx);
 extern rtx        gen_unaligned_loadhiu                 (rtx, rtx);
 extern rtx        gen_unaligned_storesi                 (rtx, rtx);
 extern rtx        gen_unaligned_storehi                 (rtx, rtx);
+extern rtx        gen_unaligned_loaddi                  (rtx, rtx);
+extern rtx        gen_unaligned_storedi                 (rtx, rtx);
 extern rtx        gen_extzv_t2                          (rtx, rtx, rtx, rtx);
 extern rtx        gen_divsi3                            (rtx, rtx, rtx);
 extern rtx        gen_udivsi3                           (rtx, rtx, rtx);

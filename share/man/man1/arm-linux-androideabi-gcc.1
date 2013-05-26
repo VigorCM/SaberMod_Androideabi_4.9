@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "GCC 1"
-.TH GCC 1 "2013-05-12" "gcc-4.9.0" "GNU"
+.TH GCC 1 "2013-05-25" "gcc-4.9.0" "GNU"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -872,7 +872,10 @@ See \s-1RS/6000\s0 and PowerPC Options.
 \&\-mno\-recip\-precision 
 \&\-mveclibabi=\fR\fItype\fR \fB\-mfriz \-mno\-friz 
 \&\-mpointers\-to\-nested\-functions \-mno\-pointers\-to\-nested\-functions 
-\&\-msave\-toc\-indirect \-mno\-save\-toc\-indirect\fR
+\&\-msave\-toc\-indirect \-mno\-save\-toc\-indirect 
+\&\-mpower8\-fusion \-mno\-mpower8\-fusion \-mpower8\-vector \-mno\-power8\-vector 
+\&\-mcrypto \-mno\-crypto \-mdirect\-move \-mno\-direct\-move 
+\&\-mquad\-memory \-mno\-quad\-memory\fR
 .Sp
 \&\fI\s-1RX\s0 Options\fR
 \&\fB\-m64bit\-doubles  \-m32bit\-doubles  \-fpu  \-nofpu
@@ -16410,7 +16413,8 @@ following options:
 \&\fB\-maltivec  \-mfprnd  \-mhard\-float  \-mmfcrf  \-mmultiple 
 \&\-mpopcntb \-mpopcntd  \-mpowerpc64 
 \&\-mpowerpc\-gpopt  \-mpowerpc\-gfxopt  \-msingle\-float \-mdouble\-float 
-\&\-msimple\-fpu \-mstring  \-mmulhw  \-mdlmzb  \-mmfpgpr \-mvsx\fR
+\&\-msimple\-fpu \-mstring  \-mmulhw  \-mdlmzb  \-mmfpgpr \-mvsx 
+\&\-mcrypto \-mdirect\-move \-mpower8\-fusion \-mpower8\-vector \-mquad\-memory\fR
 .Sp
 The particular options set for any particular \s-1CPU\s0 varies between
 compiler versions, depending on what setting seems to produce optimal
@@ -16525,6 +16529,52 @@ This option has been deprecated.  Use \fB\-mspe\fR and
 Generate code that uses (does not use) vector/scalar (\s-1VSX\s0)
 instructions, and also enable the use of built-in functions that allow
 more direct access to the \s-1VSX\s0 instruction set.
+.IP "\fB\-mcrypto\fR" 4
+.IX Item "-mcrypto"
+.PD 0
+.IP "\fB\-mno\-crypto\fR" 4
+.IX Item "-mno-crypto"
+.PD
+Enable the use (disable) of the built-in functions that allow direct
+access to the cryptographic instructions that were added in version
+2.07 of the PowerPC \s-1ISA\s0.
+.IP "\fB\-mdirect\-move\fR" 4
+.IX Item "-mdirect-move"
+.PD 0
+.IP "\fB\-mno\-direct\-move\fR" 4
+.IX Item "-mno-direct-move"
+.PD
+Generate code that uses (does not use) the instructions to move data
+between the general purpose registers and the vector/scalar (\s-1VSX\s0)
+registers that were added in version 2.07 of the PowerPC \s-1ISA\s0.
+.IP "\fB\-mpower8\-fusion\fR" 4
+.IX Item "-mpower8-fusion"
+.PD 0
+.IP "\fB\-mno\-power8\-fusion\fR" 4
+.IX Item "-mno-power8-fusion"
+.PD
+Generate code that keeps (does not keeps) some integer operations
+adjacent so that the instructions can be fused together on power8 and
+later processors.
+.IP "\fB\-mpower8\-vector\fR" 4
+.IX Item "-mpower8-vector"
+.PD 0
+.IP "\fB\-mno\-power8\-vector\fR" 4
+.IX Item "-mno-power8-vector"
+.PD
+Generate code that uses (does not use) the vector and scalar
+instructions that were added in version 2.07 of the PowerPC \s-1ISA\s0.  Also
+enable the use of built-in functions that allow more direct access to
+the vector instructions.
+.IP "\fB\-mquad\-memory\fR" 4
+.IX Item "-mquad-memory"
+.PD 0
+.IP "\fB\-mno\-quad\-memory\fR" 4
+.IX Item "-mno-quad-memory"
+.PD
+Generate code that uses (does not use) the quad word memory
+instructions.  The \fB\-mquad\-memory\fR option requires use of
+64\-bit mode.
 .IP "\fB\-mfloat\-gprs=\fR\fIyes/single/double/no\fR" 4
 .IX Item "-mfloat-gprs=yes/single/double/no"
 .PD 0
