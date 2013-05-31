@@ -363,7 +363,6 @@
 #define HAVE_iorv2sf3 (TARGET_NEON)
 #define HAVE_iorv4sf3 (TARGET_NEON)
 #define HAVE_iorv2di3 (TARGET_NEON)
-#define HAVE_iordi3_neon (TARGET_NEON)
 #define HAVE_andv8qi3 (TARGET_NEON)
 #define HAVE_andv16qi3 (TARGET_NEON)
 #define HAVE_andv4hi3 (TARGET_NEON)
@@ -1559,7 +1558,11 @@
 #define HAVE_return ((TARGET_ARM || (TARGET_THUMB2 \
                    && ARM_FUNC_TYPE (arm_current_func_type ()) == ARM_FT_NORMAL \
                    && !IS_STACKALIGN (arm_current_func_type ()))) \
-    && USE_RETURN_INSN (FALSE))
+     && USE_RETURN_INSN (FALSE))
+#define HAVE_simple_return ((TARGET_ARM || (TARGET_THUMB2 \
+                   && ARM_FUNC_TYPE (arm_current_func_type ()) == ARM_FT_NORMAL \
+                   && !IS_STACKALIGN (arm_current_func_type ()))) \
+     && use_simple_return_p ())
 #define HAVE_return_addr_mask (TARGET_ARM)
 #define HAVE_untyped_call 1
 #define HAVE_untyped_return 1
@@ -2777,7 +2780,6 @@ extern rtx        gen_iorv4si3                          (rtx, rtx, rtx);
 extern rtx        gen_iorv2sf3                          (rtx, rtx, rtx);
 extern rtx        gen_iorv4sf3                          (rtx, rtx, rtx);
 extern rtx        gen_iorv2di3                          (rtx, rtx, rtx);
-extern rtx        gen_iordi3_neon                       (rtx, rtx, rtx);
 extern rtx        gen_andv8qi3                          (rtx, rtx, rtx);
 extern rtx        gen_andv16qi3                         (rtx, rtx, rtx);
 extern rtx        gen_andv4hi3                          (rtx, rtx, rtx);
@@ -3950,6 +3952,7 @@ extern rtx        gen_sibcall                           (rtx, rtx, rtx);
 #define GEN_SIBCALL_VALUE(A, B, C, D, E) gen_sibcall_value ((A), (B), (C), (D))
 extern rtx        gen_sibcall_value                     (rtx, rtx, rtx, rtx);
 extern rtx        gen_return                            (void);
+extern rtx        gen_simple_return                     (void);
 extern rtx        gen_return_addr_mask                  (rtx);
 extern rtx        gen_untyped_call                      (rtx, rtx, rtx);
 extern rtx        gen_untyped_return                    (rtx, rtx);

@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "GCC 1"
-.TH GCC 1 "2013-05-25" "gcc-4.9.0" "GNU"
+.TH GCC 1 "2013-05-31" "gcc-4.9.0" "GNU"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -948,7 +948,7 @@ See \s-1RS/6000\s0 and PowerPC Options.
 \&\-mvis2  \-mno\-vis2  \-mvis3  \-mno\-vis3 
 \&\-mcbcond \-mno\-cbcond 
 \&\-mfmaf  \-mno\-fmaf  \-mpopc  \-mno\-popc 
-\&\-mfix\-at697f\fR
+\&\-mfix\-at697f \-mfix\-ut699\fR
 .Sp
 \&\fI\s-1SPU\s0 Options\fR
 \&\fB\-mwarn\-reloc \-merror\-reloc 
@@ -1799,6 +1799,15 @@ compiler generates parallel code according to the OpenMP Application
 Program Interface v3.0 <\fBhttp://www.openmp.org/\fR>.  This option
 implies \fB\-pthread\fR, and thus is only supported on targets that
 have support for \fB\-pthread\fR.
+.IP "\fB\-fcilkplus\fR" 4
+.IX Item "-fcilkplus"
+Enable the usage of Cilk Language extension features for C/\*(C+.  When the flag
+\&\fB\-fcilkplus\fR is specified, all the Cilk Plus components are converted 
+to the appropriate C/\*(C+ code.  The present implementation follows \s-1ABI\s0 version 
+0.9.  There are four major parts to Cilk Plus language 
+extension: Array Notations, Cilk Keywords, \s-1SIMD\s0 annotations and elemental 
+functions.  Detailed information about Cilk Plus can be found at 
+<\fBhttp://www.cilkplus.org\fR>.
 .IP "\fB\-fgnu\-tm\fR" 4
 .IX Item "-fgnu-tm"
 When the option \fB\-fgnu\-tm\fR is specified, the compiler
@@ -18474,6 +18483,10 @@ later.
 .IX Item "-mfix-at697f"
 Enable the documented workaround for the single erratum of the Atmel \s-1AT697F\s0
 processor (which corresponds to erratum #13 of the \s-1AT697E\s0 processor).
+.IP "\fB\-mfix\-ut699\fR" 4
+.IX Item "-mfix-ut699"
+Enable the documented workarounds for the floating-point errata of the \s-1UT699\s0
+processor.
 .PP
 These \fB\-m\fR options are supported in addition to the above
 on \s-1SPARC\-V9\s0 processors in 64\-bit environments:
